@@ -3,17 +3,25 @@ import { useState } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
 import { Button } from '@/components/ui/button';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate('/');
+    window.scrollTo(0, 0);
+  };
 
   const navLinks = [
-    { label: 'Services', href: '#services' },
-    { label: 'Case Studies', href: '#case-studies' },
-    { label: 'About', href: '#about' },
-    // { label: 'Pricing', href: '#pricing' },
-    { label: 'Blog', href: '#blog' },
+    { label: 'Services', href: '/services', isRoute: true },
+    { label: 'Case Studies', href: '/case-studies', isRoute: true },
+    { label: 'About', href: '#about', isRoute: false },
+    // { label: 'Pricing', href: '#pricing', isRoute: false },
+    { label: 'Blog', href: '/blog', isRoute: true },
+    { label: 'Contact', href: '/contact', isRoute: true },
   ];
 
   return (
@@ -26,10 +34,10 @@ const Navigation = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <motion.a
-            href="#"
+          <Link
+            to="/"
             className="flex items-center"
-            whileHover={{ scale: 1.02 }}
+            onClick={handleLogoClick}
           >
             <svg 
               width="80" 
@@ -44,21 +52,28 @@ const Navigation = () => {
                 fill="currentColor" 
                 className="text-primary"
               />
-            </svg>
-          </motion.a>
-
+                          </svg>
+                      </Link>
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <motion.a
-                key={link.label}
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                whileHover={{ y: -2 }}
-              >
-                {link.label}
-              </motion.a>
-            ))}
+            {navLinks.map((link) => {
+              const Component = link.isRoute ? Link : motion.a;
+              const componentProps = link.isRoute 
+                ? { to: link.href } 
+                : { href: link.href };
+              
+              return (
+                <Component
+                  key={link.label}
+                  {...componentProps}
+                  className={`text-sm font-medium transition-all duration-300 relative group text-muted-foreground hover:text-foreground`}
+                  {...(!link.isRoute && { whileHover: { y: -2 } })}
+                >
+                  {link.label}
+
+                </Component>
+              );
+            })}
           </div>
 
           {/* CTA Buttons */}
@@ -105,16 +120,34 @@ const Navigation = () => {
             className="md:hidden py-4 border-t border-border"
           >
             <div className="flex flex-col gap-4">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.label}
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                const isHighlight = link.label === 'Case Studies' || link.label === 'Blog';
+                const Component = link.isRoute ? Link : 'a';
+                const componentProps = link.isRoute 
+                  ? { to: link.href } 
+                  : { href: link.href };
+                
+                return (
+                  <Component
+                    key={link.label}
+                    {...componentProps}
+                    className={`text-sm font-medium transition-all duration-300 py-2 relative flex items-center gap-2 ${
+                      isHighlight 
+                        ? 'text-foreground hover:text-primary font-semibold pl-4' 
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {isHighlight && (
+                      <span className="flex h-2 w-2 absolute left-0">
+                        <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-primary opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                      </span>
+                    )}
+                    {link.label}
+                  </Component>
+                );
+              })}
               <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
                 <span className="text-sm font-medium text-muted-foreground">Theme</span>
                 <Button

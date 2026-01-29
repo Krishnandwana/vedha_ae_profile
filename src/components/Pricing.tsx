@@ -104,10 +104,22 @@ const Pricing = () => {
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.1 * index }}
-              className={`relative bg-card/40 backdrop-blur-xl border border-border/50 rounded-2xl p-8 flex flex-col shadow-lg shadow-black/10 ${
-                plan.highlighted ? 'border-primary/80 ring-2 ring-primary/50' : ''
+              className={`relative rounded-2xl p-8 flex flex-col hover:scale-[1.02] transition-all duration-500 overflow-hidden ${
+                plan.highlighted ? 'ring-2 ring-primary/50' : ''
               }`}
+              style={{
+                boxShadow: 'rgba(0, 0, 0, 0.37) 0px 8px 32px 0px, rgba(255, 255, 255, 0.1) 0px 1px 0px 0px inset',
+                backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                backdropFilter: 'blur(8px) saturate(120%)',
+                border: plan.highlighted ? '1px solid rgba(229, 255, 0, 0.3)' : '1px solid rgba(255, 255, 255, 0.08)',
+              }}
             >
+              {/* Subtle theme color tint */}
+              <div className="absolute bottom-0 right-0 w-[60%] h-[60%] bg-gradient-to-tl from-primary/8 via-primary/4 to-transparent rounded-2xl pointer-events-none" />
+              {plan.highlighted && (
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent pointer-events-none" />
+              )}
+              
               {plan.highlighted && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-wider">
                   Most Popular

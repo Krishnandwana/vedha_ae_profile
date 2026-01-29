@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from '@/hooks/useInView';
 import { Quote } from 'lucide-react';
+import { useRef, useEffect } from 'react';
 
 const testimonials = [
   {
@@ -28,6 +29,55 @@ const testimonials = [
 
 const Testimonials = () => {
   const [ref, isInView] = useInView({ threshold: 0.1 });
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    let animationFrameId: number;
+    let isHovering = false;
+    let lastTime = Date.now();
+
+    const smoothScroll = () => {
+      const currentTime = Date.now();
+      const deltaTime = currentTime - lastTime;
+      
+      if (!isHovering && scrollContainer && deltaTime > 16) {
+        const scrollWidth = scrollContainer.scrollWidth;
+        const currentScroll = scrollContainer.scrollLeft;
+        
+        // Reset to start when reaching the duplicated items (halfway through total scroll)
+        if (currentScroll >= (scrollWidth / 2)) {
+          scrollContainer.scrollLeft = 0;
+        } else {
+          scrollContainer.scrollLeft += 0.4;
+        }
+        
+        lastTime = currentTime;
+      }
+      
+      animationFrameId = requestAnimationFrame(smoothScroll);
+    };
+
+    const handleMouseEnter = () => {
+      isHovering = true;
+    };
+
+    const handleMouseLeave = () => {
+      isHovering = false;
+    };
+
+    scrollContainer.addEventListener('mouseenter', handleMouseEnter);
+    scrollContainer.addEventListener('mouseleave', handleMouseLeave);
+    animationFrameId = requestAnimationFrame(smoothScroll);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      scrollContainer.removeEventListener('mouseenter', handleMouseEnter);
+      scrollContainer.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
 
   return (
     <section ref={ref} id="testimonials" className="py-32 md:py-40 bg-muted/30 min-h-screen flex flex-col justify-center">
@@ -38,44 +88,68 @@ const Testimonials = () => {
         className="container mx-auto px-6"
       >
         {/* Section Header */}
-        <div className="text-center mb-20 md:mb-24">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="section-badge inline-flex mb-6 md:mb-8"
-          >
-            <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-            Testimonials
-          </motion.div>
+        <div className="flex items-end justify-between mb-16 md:mb-20">
+          <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6"
+            >
+              <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+              <span className="text-xs font-medium tracking-wider uppercase text-primary">
+                Client Praise
+              </span>
+            </motion.div>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="section-title"
-          >
-            People we’ve helped reach their next level.
-          </motion.h2>
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-4xl md:text-6xl font-bold text-white tracking-tight"
+            >
+              What They Say
+            </motion.h2>
+          </div>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
-          {testimonials.map((testimonial, index) => (
+        {/* Testimonials Carousel */}
+        <div ref={scrollRef} className="flex gap-6 overflow-x-auto pb-12 pr-20 testimonials-carousel">
+          <style>{`
+            .testimonials-carousel::-webkit-scrollbar {
+              display: none;
+            }
+            .testimonials-carousel {
+              scroll-behavior: auto;
+            }
+          `}</style>
+          {[...testimonials, ...testimonials].map((testimonial, index) => (
             <motion.div
-              key={testimonial.author}
-              initial={{ opacity: 0, y: 40 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 * index }}
-              className="bg-card border border-border rounded-2xl p-8 md:p-10 hover:border-primary/30 hover:shadow-lg transition-all duration-300"
+              key={`${testimonial.author}-${index}`}
+              initial={{ opacity: 0, x: 40 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.1 * (index % 3) }}
+              className="group flex-none w-[90vw] sm:w-[75vw] md:w-[55vw] lg:w-[480px] rounded-2xl p-6 md:p-8 hover:border-primary/50 transition-all duration-500 relative overflow-hidden shadow-2xl"
+              style={{
+                boxShadow: 'rgba(0, 0, 0, 0.37) 0px 8px 32px 0px, rgba(255, 255, 255, 0.1) 0px 1px 0px 0px inset',
+                backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                backdropFilter: 'blur(8px) saturate(120%)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+              }}
             >
-              <Quote className="w-10 h-10 text-primary/30 mb-6" />
+              {/* Subtle theme color tint in bottom right */}
+              <div className="absolute bottom-0 right-0 w-[60%] h-[60%] bg-gradient-to-tl from-primary/8 via-primary/4 to-transparent rounded-2xl pointer-events-none" />
+              
+              {/* Hover Glow Effect */}
+              <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl -z-10" />
 
-              <p className="text-foreground text-lg leading-relaxed mb-8">
+              <Quote className="w-10 h-10 text-primary/30 mb-6 relative z-10" />
+
+              <p className="text-foreground text-lg leading-relaxed mb-8 relative z-10">
                 "{testimonial.quote}"
               </p>
 
-              {/* <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 relative z-10">
                 <img
                   src={testimonial.avatar}
                   alt={testimonial.author}
@@ -87,7 +161,7 @@ const Testimonials = () => {
                     {testimonial.role}, {testimonial.company}
                   </p>
                 </div>
-              </div> */}
+              </div>
             </motion.div>
           ))}
         </div>
