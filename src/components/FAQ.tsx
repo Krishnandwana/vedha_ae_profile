@@ -72,17 +72,26 @@ const FAQ = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, delay: 0.1 * index }}
-              className="border-b border-border"
+              className="mb-4 rounded-2xl overflow-hidden relative"
+              style={{
+                boxShadow: 'rgba(0, 0, 0, 0.37) 0px 8px 32px 0px, rgba(255, 255, 255, 0.1) 0px 1px 0px 0px inset',
+                backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                backdropFilter: 'blur(8px) saturate(120%)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+              }}
             >
+              {/* Subtle theme color tint */}
+              <div className="absolute bottom-0 right-0 w-[40%] h-[40%] bg-gradient-to-tl from-primary/6 via-primary/3 to-transparent rounded-2xl pointer-events-none" />
+              
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full py-6 md:py-8 flex items-center justify-between text-left"
+                className="w-full px-6 md:px-8 py-6 md:py-8 flex items-center justify-between text-left relative z-10"
               >
                 <span className="font-display font-semibold text-lg text-foreground pr-8">
                   {faq.question}
                 </span>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
-                  openIndex === index ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                  openIndex === index ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/30' : 'bg-muted/50 text-muted-foreground'
                 }`}>
                   {openIndex === index ? <Minus size={18} /> : <Plus size={18} />}
                 </div>
@@ -97,7 +106,7 @@ const FAQ = () => {
                 transition={{ duration: 0.3 }}
                 className="overflow-hidden"
               >
-                <p className="pb-6 text-muted-foreground leading-relaxed">
+                <p className="px-6 md:px-8 pb-6 text-muted-foreground leading-relaxed relative z-10">
                   {faq.answer}
                 </p>
               </motion.div>

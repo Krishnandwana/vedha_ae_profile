@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from '@/hooks/useInView';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const [ref, isInView] = useInView({ threshold: 0.1 });
@@ -13,10 +14,10 @@ const Footer = () => {
       { label: 'Careers', href: '#' },
     ],
     services: [
-      { label: 'Web Development', href: '#services' },
-      { label: 'Digital Marketing', href: '#services' },
-      { label: 'Brand Strategy', href: '#services' },
-      { label: 'SEO & Analytics', href: '#services' },
+      { label: 'Tech Development', href: '/services?service=1' },
+      { label: 'AI Development & Services', href: '/services?service=2' },
+      { label: 'Design & Branding', href: '/services?service=3' },
+      { label: 'Consultation', href: '/contact' },
     ],
     resources: [
       { label: 'Documentation', href: '#' },
@@ -44,23 +45,24 @@ const Footer = () => {
             className="max-w-4xl mx-auto text-center"
           >
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-semibold mb-6">
-              Ready to elevate your
+              Ready to transform with
               <br />
-              <span className="gradient-text">digital presence?</span>
+              <span className="gradient-text">intelligent AI?</span>
             </h2>
             <p className="text-xl text-secondary-foreground/70 mb-10 max-w-2xl mx-auto">
-              Let's discuss how we can help you build, market, and scale 
-              your business to new heights.
+              Let's discuss how we can help you build intelligent AI systems and automate 
+              your business processes for maximum efficiency.
             </p>
-            <motion.a
-              href="#"
-              className="btn-primary inline-flex items-center gap-2 text-lg px-10 py-5"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Get Free Consultation
-              <ArrowRight size={20} />
-            </motion.a>
+            <Link to="/contact">
+              <motion.button
+                className="btn-primary inline-flex items-center gap-2 text-lg px-10 py-5"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Get Free Consultation
+                <ArrowRight size={20} />
+              </motion.button>
+            </Link>
           </motion.div>
         </div>
       </div>
@@ -77,8 +79,8 @@ const Footer = () => {
               <span className="font-display font-semibold text-xl">Vedha</span>
             </div>
             <p className="text-secondary-foreground/60 mb-6 max-w-sm">
-              Your full-service tech and marketing partner. We build digital products, 
-              drive growth, and transform brands for the modern era.
+              Your specialized AI development and automation partner. We build intelligent systems, 
+              deploy machine learning solutions, and transform operations with AI.
             </p>
             <div className="flex gap-4">
               {['X', 'Li', 'Ig'].map((social) => (

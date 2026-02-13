@@ -6,25 +6,25 @@ const team = [
   {
     name: 'Alex Rivera',
     role: 'Founder & CEO',
-    bio: 'Former Google product lead with 12+ years in tech and digital strategy.',
+    bio: 'Former AI research scientist with 12+ years in machine learning and enterprise AI.',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
   },
   {
     name: 'Jordan Lee',
-    role: 'CTO',
-    bio: 'Full-stack architect who has built platforms serving millions of users.',
+    role: 'Chief AI Officer',
+    bio: 'ML engineer who has built AI systems serving millions of users worldwide.',
     avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop',
   },
   {
     name: 'Sam Patel',
-    role: 'Head of Marketing',
-    bio: 'Growth expert who has scaled startups from zero to 7-figure revenue.',
+    role: 'Head of AI Engineering',
+    bio: 'AI specialist who has deployed intelligent systems for Fortune 500 companies.',
     avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop',
   },
   {
     name: 'Casey Morgan',
-    role: 'Creative Director',
-    bio: 'Award-winning designer with a passion for brand storytelling.',
+    role: 'AI Solutions Architect',
+    bio: 'Expert in designing scalable AI infrastructures and intelligent automation.',
     avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=400&fit=crop',
   },
 ];
@@ -67,8 +67,8 @@ const About = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="section-subtitle mx-auto"
           >
-            We're a team of strategists, developers, designers, and marketers passionate about 
-            helping businesses succeed in the digital landscape.
+            We're a team of AI engineers, data scientists, machine learning specialists, and automation experts passionate about 
+            helping businesses harness the power of artificial intelligence.
           </motion.p>
         </div>
 
